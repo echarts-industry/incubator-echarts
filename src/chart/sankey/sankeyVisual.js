@@ -41,7 +41,7 @@ export default function (ecModel, payload) {
                     maxValue = nodeValue;
                 }
             });
-            
+
             zrUtil.each(nodes, function (node) {
                 var mapping = new VisualMapping({
                     type: 'color',
@@ -49,15 +49,12 @@ export default function (ecModel, payload) {
                     dataExtent: [minValue, maxValue],
                     visual: seriesModel.get('color')
                 });
-    
+
                 var mapValueToColor = mapping.mapValueToVisual(node.getLayout().value);
-                node.setVisual('color', mapValueToColor);
-                // If set itemStyle.normal.color
-                var itemModel = node.getModel();
-                var customColor = itemModel.get('itemStyle.color');
-                if (customColor != null) {
-                    node.setVisual('color', customColor);
-                }
+                var customColor = node.getModel().get('itemStyle.color');
+                customColor != null
+                    ? node.setVisual('color', customColor)
+                    : node.setVisual('color', mapValueToColor);
             });
         }
     });
